@@ -113,3 +113,20 @@ Place this in your repo’s `.gitignore`:
 - **Can I change the S3 key path?** Yes. Change `key` in `backend/dev.hcl` (e.g., `workspaces/dev/app1.tfstate`) and re-run `terraform init -reconfigure`.
 - **How do I reuse across many repos?** Copy `backend/dev.hcl` (with your values) into each repo, add the backend stub, then run `terraform init -reconfigure -backend-config=backend/dev.hcl`.
 
+
+## Backend config template (local-only values)
+This repo tracks a template at `backend/dev.example.hcl` and **ignores** real backend files (see `.gitignore`).
+To use the remote state in a new clone:
+
+1) Copy the template and fill in values:
+   cp backend/dev.example.hcl backend/dev.hcl
+   # edit backend/dev.hcl and replace:
+   #   <STATE_BUCKET_NAME>, <AWS_REGION>, <DDB_LOCK_TABLE_NAME>, <KMS_KEY_ARN>
+
+2) Add an empty S3 backend block to your Terraform stack:
+   terraform {
+     backend "s3" {}
+   }
+
+3) Initialize Terraform against the backend config:
+   terraform init -reconfigure -backend-config=backend/dev.hcl
