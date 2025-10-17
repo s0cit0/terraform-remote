@@ -7,3 +7,6 @@ crash.log
 
 # Keep the lockfile tracked for deterministic builds
 # .terraform.lock.hcl
+# Backend configs (keep real values local)
+backend/*.hcl
+!backend/*.example.hcl
